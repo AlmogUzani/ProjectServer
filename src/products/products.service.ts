@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Products } from './entities/product.entity';
+import { ProductsDto } from './products-dto';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
+  constructor(@InjectRepository(Products) private productRepo: Repository<Products>) {}
+
+  create(createProductDto: ProductsDto) {
     return 'This action adds a new product';
   }
 
@@ -16,7 +20,7 @@ export class ProductsService {
     return `This action returns a #${id} product`;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  update(id: number, updateProductDto: ProductsDto) {
     return `This action updates a #${id} product`;
   }
 

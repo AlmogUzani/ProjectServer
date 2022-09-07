@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { WishlistModule } from './wishlist/wishlist.module';
 import { ProductsModule } from './products/products.module';
 import { ProductcategoriesModule } from './productcategories/productcategories.module';
 import { OrdersModule } from './orders/orders.module';
@@ -15,7 +14,6 @@ import { Orderdetails } from './orderdetails/entities/orderdetail.entity';
 import { Orders } from './orders/entities/order.entity';
 import { Productcategories } from './productcategories/entities/productcategory.entity';
 import { Products } from './products/entities/product.entity';
-import { Wishlist } from './wishlist/entities/wishlist.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -25,9 +23,9 @@ import { Wishlist } from './wishlist/entities/wishlist.entity';
     "username": "root",
     "password": "123456",
     "database": "project",
-    "entities": [Users,Categories,Orderdetails,Orders,Productcategories,Products,Wishlist],
+    "entities": [Users,Categories,Orderdetails,Orders,Productcategories,Products],
     "synchronize": true
-  }), UsersModule, CategoriesModule, OrderdetailsModule, OrdersModule, ProductcategoriesModule, ProductsModule, WishlistModule],
+  }), UsersModule, CategoriesModule, OrderdetailsModule, OrdersModule, ProductcategoriesModule, ProductsModule],
   controllers: [AppController],
   providers: [AppService],
 })

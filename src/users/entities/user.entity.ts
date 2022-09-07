@@ -18,8 +18,8 @@ export class Users {
     @Column('varchar',{length:30})
     email:string
 
-    @Column('datetime')
-    registerDate:string
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    registerDate:Date
 
     @Column('char',{length:250})
     password:string

@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductcategoryDto } from './dto/create-productcategory.dto';
-import { UpdateProductcategoryDto } from './dto/update-productcategory.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Productcategories } from './entities/productcategory.entity';
+import { ProductcategoriesDto } from './productcategory-dto';
 
 @Injectable()
 export class ProductcategoriesService {
-  create(createProductcategoryDto: CreateProductcategoryDto) {
+  constructor(@InjectRepository(Productcategories) private productcategoriesRepo: Repository<Productcategories>){}
+  create(createProductcategoryDto: ProductcategoriesDto) {
     return 'This action adds a new productcategory';
   }
 
@@ -16,7 +19,7 @@ export class ProductcategoriesService {
     return `This action returns a #${id} productcategory`;
   }
 
-  update(id: number, updateProductcategoryDto: UpdateProductcategoryDto) {
+  update(id: number, updateProductcategoryDto: ProductcategoriesDto) {
     return `This action updates a #${id} productcategory`;
   }
 

@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrderdetailDto } from './dto/create-orderdetail.dto';
-import { UpdateOrderdetailDto } from './dto/update-orderdetail.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Orderdetails } from './entities/orderdetail.entity';
+import { OrderdetailsDto } from './orderdetails-dto';
 
 @Injectable()
 export class OrderdetailsService {
-  create(createOrderdetailDto: CreateOrderdetailDto) {
+  constructor(@InjectRepository(Orderdetails) private orderdetailsRepo: Repository<Orderdetails>){}
+  create(createOrderdetailDto: OrderdetailsDto) {
     return 'This action adds a new orderdetail';
   }
 
@@ -16,7 +19,7 @@ export class OrderdetailsService {
     return `This action returns a #${id} orderdetail`;
   }
 
-  update(id: number, updateOrderdetailDto: UpdateOrderdetailDto) {
+  update(id: number, updateOrderdetailDto: OrderdetailsDto) {
     return `This action updates a #${id} orderdetail`;
   }
 
