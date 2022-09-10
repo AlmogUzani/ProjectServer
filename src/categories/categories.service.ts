@@ -13,13 +13,15 @@ export class CategoriesService {
     return 'This action adds a new category';
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll(): Promise<CategoriesDto[]> {
+      return await this.categoriesRepo.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
+  async findOne(id:number): Promise<CategoriesDto[]> {
+    return await this.categoriesRepo.find({
+      where : [{'categoryID' : id}]
+    })
+}
 
   update(id: number, updateCategoryDto: CategoriesDto) {
     return `This action updates a #${id} category`;

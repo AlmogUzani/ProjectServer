@@ -1,0 +1,9 @@
+{
+    "window.commandCenter": false,
+    "explorer.autoReveal": true,
+    "explorer.compactFolders": true,
+    "explorer.incrementalNaming": "simple",
+    "workbench.activityBar.iconClickBehavior": "toggle",
+    "workbench.sideBar.location": "left",
+    "window.titleSeparator": " - "
+}

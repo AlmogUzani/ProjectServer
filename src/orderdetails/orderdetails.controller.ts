@@ -16,6 +16,11 @@ export class OrderdetailsController {
     return this.orderdetailsService.findAll();
   }
 
+  @Get('bestSellers')
+  findBestSeller() {
+    return this.orderdetailsService.findBestSellers();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.orderdetailsService.findOne(+id);

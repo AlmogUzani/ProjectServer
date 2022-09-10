@@ -11,12 +11,14 @@ export class OrdersService {
     return 'This action adds a new order';
   }
 
-  findAll() {
-    return `This action returns all orders`;
+  async findAll(): Promise<Orders[]> {
+    return await this.OrdersRepo.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: number): Promise<Orders[]> {
+    return await this.OrdersRepo.find({
+      where: [{'orderID':id}]
+    })
   }
 
   update(id: number, updateOrderDto: OrdersDto) {

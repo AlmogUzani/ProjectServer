@@ -6,6 +6,14 @@ export class ProductsDto {
 
     categoryID:number
 
+    size:string
+    
+    shape:string
+    
+    color:string
+
+    discount:number
+
     price:number
 
     name:string
@@ -14,4 +22,9 @@ export class ProductsDto {
 
     unitInStock:number
 
+    image1:string
+
+    image2:string
+
+    image3:string
 }

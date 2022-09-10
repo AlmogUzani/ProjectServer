@@ -12,12 +12,22 @@ export class ProductsService {
     return 'This action adds a new product';
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(): Promise<Products[]> {
+    return await this.productRepo.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number): Promise<Products[]> {
+    return await this.productRepo.find({
+      where: [{'productID':id}]
+    })
+  }
+
+  async findBestSellers(): Promise<Products[]> {
+    return await this.productRepo.query(`SELECT productID 
+    FROM project.orderdetails 
+    GROUP BY productID
+    ORDER BY COUNT(productID) DESC 
+    LIMIT 3;`)
   }
 
   update(id: number, updateProductDto: ProductsDto) {

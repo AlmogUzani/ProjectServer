@@ -24,7 +24,7 @@ import { Products } from './products/entities/product.entity';
     "password": "123456",
     "database": "project",
     "entities": [Users,Categories,Orderdetails,Orders,Productcategories,Products],
-    "synchronize": true
+    "synchronize": false
   }), UsersModule, CategoriesModule, OrderdetailsModule, OrdersModule, ProductcategoriesModule, ProductsModule],
   controllers: [AppController],
   providers: [AppService],

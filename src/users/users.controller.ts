@@ -1,7 +1,9 @@
-import { Controller, Post, Body, Get, Put, Delete,Param} from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './entities/user.entity';
 import { UsersDto } from './users-dto';
+import { decrypt } from '../crypt';
+
 
 @Controller('users')
 export class UsersController {
@@ -16,6 +18,20 @@ export class UsersController {
     @Get(':id')
     get(@Param() params) {
         return this.service.getUser(params.id);
+    }
+    
+    @Post('cart')
+    getCart(@Body() body) {       
+        console.log(body)
+        const dec = decrypt(body.encryptedUserIdJson)
+        console.log('dec',dec);
+        return this.service.getCart(Number(dec))
+    }
+
+
+    @Post('login')
+    loginn(@Body() userLogin){
+        return this.service.login(userLogin.username, userLogin.password)
     }
 
     @Post()

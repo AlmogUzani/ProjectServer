@@ -11,6 +11,18 @@ export class Products {
 
     @Column('double')
     price:number
+    
+    @Column('varchar', {length:10})
+    size:string
+    
+    @Column('varchar', {length:10})
+    shape:string
+    
+    @Column('varchar', {length:10})
+    color:string
+
+    @Column('tinyint')
+    discount:number
 
     @Column('varchar',{length:30})
     name:string
@@ -20,5 +32,14 @@ export class Products {
 
     @Column('smallint')
     unitInStock:number
+
+    @Column('varchar', {length:500, nullable:true})
+    image1:string
+    
+    @Column('varchar', {length:500, nullable:true})
+    image2:string
+
+    @Column('varchar', {length:500, nullable:true})
+    image3:string
 
 }

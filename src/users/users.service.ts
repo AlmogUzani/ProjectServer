@@ -1,8 +1,10 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './entities/user.entity';
 import { UsersDto } from './users-dto';
+import * as bcrypt from 'bcrypt'
+import { encrypt } from '../crypt';
 
 @Injectable()
 export class UsersService {
@@ -12,11 +14,24 @@ export class UsersService {
         return await this.usersRepo.find();
     }
 
-    async getUser(_id: number): Promise<Users[]> {
+    async getUser(id: number): Promise<Users[]> {
         return await this.usersRepo.find({
-            select: ["name"],
-            where: [{ "userID": _id }]
+            where: [{ "userID": id }]
         });
+    }
+
+    async getUserByUsername(username: string): Promise<Users> {
+        return await this.usersRepo.findOne({
+            where: [{ "username": username }]
+        });
+    }
+
+    async getCart(id: number): Promise<Users[]> {
+        return await this.usersRepo.query(`SELECT project.products.name, project.orderdetails.quantity, project.orderdetails.unitPrice, project.products.image1
+        FROM project.orders
+        LEFT JOIN project.orderdetails ON project.orderdetails.orderID = project.orders.orderID
+        LEFT JOIN project.products ON project.orderdetails.productID = project.products.productID
+        WHERE project.orders.userID = ${id};`)
     }
 
     async add(newCustomer: UsersDto): Promise<Users> {
@@ -27,6 +42,15 @@ export class UsersService {
         }
     }
 
+
+    async login(username, password) {
+        const user = await this.getUserByUsername(username)
+        if(user && (await bcrypt.compare(password, user.password))){
+            const encrypted = await encrypt(String(user.userID))
+            return {encrypted}
+        }
+        return {err:"Username or Password are incorrect!"}
+    }
 
     async updateUser(user: Users) {
         this.usersRepo.save(user)

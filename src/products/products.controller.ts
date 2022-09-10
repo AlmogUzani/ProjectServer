@@ -18,8 +18,13 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  findOne(@Param('id') id: Number) {
+    return this.productsService.findOne(Number(id));
+  }
+
+  @Get('bestSellers')
+  findBestSellers() {
+    return this.productsService.findBestSellers();
   }
 
   @Patch(':id')

@@ -8,5 +8,8 @@ export class Categories {
 
     @Column('varchar',{length:30})
     categoryName:string
+
+    @Column('varchar', {length:500, nullable:true})
+    image:string
 }
 
