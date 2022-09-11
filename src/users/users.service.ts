@@ -49,18 +49,11 @@ export class UsersService {
     async addTOCart(userID, product, amount): Promise<Users[]> {
         if(this.usersRepo.query(`select * from project.orders where project.orders.userID = ?;`,[userID])){
             const condition = await this.usersRepo.query(`select * from project.orderdetails where (orderID = (select orderID from orders where userID = ?)) and project.orderdetails.productID = ?;`,[userID, product.productID])
-            console.log(condition);
-            
             if(condition.length !== 0) {
-                console.log('a');
-                
                 await this.usersRepo.query(`UPDATE project.orderdetails SET quantity = quantity + ? WHERE (orderID = (select orderID from orders where userID = ?)) and (productID = ?);`,[amount, userID, product.productID])
                 return await this.usersRepo.query(`UPDATE project.products SET unitInStock = unitInStock-${amount} WHERE productID = ?;`,[product.productID])
-            }else{
-                console.log('s');        
+            }else{       
                 await this.usersRepo.query(`insert into project.orderdetails(orderID,productID,quantity,unitPrice,discount) values((select orderID from project.orders where userID = ${userID}), ${product.productID}, quantity+${amount}, ${product.price}, ${product.discount});`)
-                console.log('ss');
-                
                 return await this.usersRepo.query(`UPDATE project.products SET unitInStock = unitInStock-${amount} WHERE productID = ?;`,[product.productID])
             }
         }
@@ -73,10 +66,10 @@ export class UsersService {
 
     async add(newCustomer: UsersDto): Promise<Users> {
         console.log(newCustomer);
-        const customer = this.usersRepo.create([{ ...newCustomer }]);
-        if (customer.length) {
-          return this.usersRepo.save(customer[0]);
-        }
+        const hashed = await bcrypt.hash(newCustomer.password,10)
+        console.log(hashed);
+        newCustomer.password = hashed
+        return this.usersRepo.save(newCustomer)
     }
 
 

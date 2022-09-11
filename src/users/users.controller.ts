@@ -44,13 +44,12 @@ export class UsersController {
         return this.service.getUser(Number(userID))
     }
 
-
     @Post('login')
     loginn(@Body() userLogin){
         return this.service.login(userLogin.username, userLogin.password)
     }
 
-    @Post()
+    @Post('create')
     create(@Body() newCustomer: UsersDto) {
         return this.service.add(newCustomer);
     }

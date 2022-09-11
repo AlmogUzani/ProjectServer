@@ -23,5 +23,11 @@ export class Users {
 
     @Column('char',{length:250})
     password:string
+
+    @Column('varchar',{length:45})
+    phoneNumber:string
+
+    @Column('varchar',{length:45})
+    address:string
 }
 

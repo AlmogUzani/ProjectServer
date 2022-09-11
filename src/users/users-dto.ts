@@ -38,4 +38,12 @@ export class UsersDto {
     // @MinLength(6)
     // @MaxLength(10)
     password: string;
+
+    @IsNotEmpty()
+    @MinLength(9)
+    phoneNumber:string
+
+    @IsNotEmpty()
+    @MinLength(3)
+    address:string
 }
