@@ -22,10 +22,26 @@ export class UsersController {
     
     @Post('cart')
     getCart(@Body() body) {       
-        console.log(body)
-        const dec = decrypt(body.encryptedUserIdJson)
-        console.log('dec',dec);
-        return this.service.getCart(Number(dec))
+        const userID = decrypt(body.encryptedUserIdJson)
+        return this.service.getCart(Number(userID))
+    }
+
+    @Post('updateCart')
+    updateCart(@Body() body) {
+        const userID = decrypt(body.userID)
+        return this.service.updateCart(userID, body.productID, body.amount, body.ifPos)
+    }
+
+    @Post('addToCart')
+    addToCart(@Body() body) {
+        const userID = decrypt(body.userID)
+        return this.service.addTOCart(userID, body.product, body.amount)
+    }
+
+    @Post('getUser')
+    getUserFromCookie(@Body() body) {
+        const userID = decrypt(body.encryptedUserIdJson)
+        return this.service.getUser(Number(userID))
     }
 
 

@@ -27,11 +27,48 @@ export class UsersService {
     }
 
     async getCart(id: number): Promise<Users[]> {
-        return await this.usersRepo.query(`SELECT project.products.name, project.orderdetails.quantity, project.orderdetails.unitPrice, project.products.image1
+        return await this.usersRepo.query(`SELECT project.products.productID, project.products.name, project.orderdetails.quantity, project.orderdetails.unitPrice, project.products.image1
         FROM project.orders
         LEFT JOIN project.orderdetails ON project.orderdetails.orderID = project.orders.orderID
         LEFT JOIN project.products ON project.orderdetails.productID = project.products.productID
         WHERE project.orders.userID = ${id};`)
+    }
+
+    async updateCart(userID, productID, amount,ifPos): Promise<Users[]> {
+        if(amount==0){
+            await this.usersRepo.query(`DELETE FROM project.orderdetails where (orderID = (select orderID from orders where userID = ?)) and (productID = ?);`,[userID, productID])
+        }else{
+            await this.usersRepo.query(`UPDATE project.orderdetails SET quantity = ? WHERE (orderID = (select orderID from orders where userID = ?)) and (productID = ?);`,[amount, userID, productID, productID]);
+        }
+        if(ifPos){
+            return await this.usersRepo.query(`UPDATE project.products SET unitInStock = unitInStock-1 WHERE productID = ?;`,[productID])
+        }
+        return await this.usersRepo.query(`UPDATE project.products SET unitInStock = unitInStock+1 WHERE productID = ?;`,[productID])
+    }
+
+    async addTOCart(userID, product, amount): Promise<Users[]> {
+        if(this.usersRepo.query(`select * from project.orders where project.orders.userID = ?;`,[userID])){
+            const condition = await this.usersRepo.query(`select * from project.orderdetails where (orderID = (select orderID from orders where userID = ?)) and project.orderdetails.productID = ?;`,[userID, product.productID])
+            console.log(condition);
+            
+            if(condition.length !== 0) {
+                console.log('a');
+                
+                await this.usersRepo.query(`UPDATE project.orderdetails SET quantity = quantity + ? WHERE (orderID = (select orderID from orders where userID = ?)) and (productID = ?);`,[amount, userID, product.productID])
+                return await this.usersRepo.query(`UPDATE project.products SET unitInStock = unitInStock-${amount} WHERE productID = ?;`,[product.productID])
+            }else{
+                console.log('s');        
+                await this.usersRepo.query(`insert into project.orderdetails(orderID,productID,quantity,unitPrice,discount) values((select orderID from project.orders where userID = ${userID}), ${product.productID}, quantity+${amount}, ${product.price}, ${product.discount});`)
+                console.log('ss');
+                
+                return await this.usersRepo.query(`UPDATE project.products SET unitInStock = unitInStock-${amount} WHERE productID = ?;`,[product.productID])
+            }
+        }
+        await this.usersRepo.query(`insert into project.orders(userID) values(${userID});
+        insert into project.orderdetails(orderID,productID,quantity,unitPrice,discount) values((select orderID from project.orders where userID = ${userID}), ${product.productID}, ${amount}, ${product.price}, ${product.discount});`)
+        console.log('sa');
+        
+        return await this.usersRepo.query(`UPDATE project.products SET unitInStock = unitInStock-${amount} WHERE productID = ?;`,[ product.productID])
     }
 
     async add(newCustomer: UsersDto): Promise<Users> {

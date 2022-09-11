@@ -28,7 +28,7 @@ export class OrderdetailsService {
     FROM project.orderdetails 
     GROUP BY productID
     ORDER BY quantityy DESC 
-    LIMIT 3) as bestSeller on products.productID = bestSeller.productID;`)
+    LIMIT 8) as bestSeller on products.productID = bestSeller.productID;`)
   }
 
   update(id: number, updateOrderdetailDto: OrderdetailsDto) {

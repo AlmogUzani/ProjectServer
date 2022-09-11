@@ -21,7 +21,6 @@ export const decrypt = (hash) => {
     const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.encrypted.iv, 'hex'));
 
     const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.encrypted.content, 'hex')), decipher.final()]);
-    console.log(decrpyted);
     
 
     return decrpyted.toString();
